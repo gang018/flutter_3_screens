@@ -1,14 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_3_screens/di/RepositoryProvider.dart';
+import 'package:flutter_3_screens/presentation/auth/presenter/AuthPresenter.dart';
+import 'package:flutter_3_screens/presentation/auth/view/SignUpScreen.dart';
+import 'package:flutter_3_screens/presentation/profile/view/ProfileScreen.dart';
 
 class AuthScreen extends StatefulWidget {
 
   @override
-  State<StatefulWidget> createState() {
-    return _AuthScreenState();
-  }
+  State<StatefulWidget> createState() => AuthScreenState();
 }
 
-class _AuthScreenState extends State<AuthScreen> {
+class AuthScreenState extends State<AuthScreen> {
+
+  AuthPresenter _presenter;
+
+  TextEditingController _mailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _presenter = AuthPresenter(RepositoryProvider().getProfileRepo());
+    _presenter.bindView(this);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +38,9 @@ class _AuthScreenState extends State<AuthScreen> {
           children: <Widget>[
             TextFormField(
               maxLines: 1,
-              initialValue: "oktrus@gmail.com",
+              controller: _mailController,
+//              initialValue: "oktrus@gmail.com",
+              keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
@@ -35,8 +52,9 @@ class _AuthScreenState extends State<AuthScreen> {
             ),
             TextFormField(
               maxLines: 1,
-              initialValue: "qwe123",
-              textInputAction: TextInputAction.done,
+              controller: _passwordController,
+//              initialValue: "qwe123",
+              keyboardType: TextInputType.visiblePassword,
               decoration: InputDecoration(
                 enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
@@ -50,22 +68,45 @@ class _AuthScreenState extends State<AuthScreen> {
               child: Text("Войти"),
               color: Colors.green,
               textColor: Colors.white,
-              onPressed: () {
-                print("clicked");
-              },
+              onPressed: () => _presenter.handleSignInClick(_mailController.text, _passwordController.text),
             ),
             Spacer(),
             RaisedButton(
               color: Colors.green,
               textColor: Colors.white,
               child: Text("Регистрация"),
-              onPressed: () {
-                print("clicked");
-              },
+              onPressed: () => _presenter.handleSignUpClick(),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  void showError() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: Text("Ошибка авторизации"),
+        actions: <Widget>[
+          MaterialButton(
+            child: Text("OK"),
+            onPressed: () => Navigator.of(context).pop(),
+          )
+        ],
+      ),
+    );
+  }
+
+  void showSignUp() {
+    Navigator.of(context).push(
+        MaterialPageRoute(builder: (BuildContext context) => SignUpScreen())
+    );
+  }
+
+  void showProfile() {
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (BuildContext context) => ProfileScreen())
     );
   }
 }
