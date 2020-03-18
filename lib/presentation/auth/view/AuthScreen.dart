@@ -27,7 +27,6 @@ class AuthScreenState extends State<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Авторизация"),
@@ -39,8 +38,8 @@ class AuthScreenState extends State<AuthScreen> {
             TextFormField(
               maxLines: 1,
               controller: _mailController,
-//              initialValue: "oktrus@gmail.com",
               keyboardType: TextInputType.emailAddress,
+              textInputAction: TextInputAction.next,
               decoration: InputDecoration(
                 enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
@@ -53,8 +52,8 @@ class AuthScreenState extends State<AuthScreen> {
             TextFormField(
               maxLines: 1,
               controller: _passwordController,
-//              initialValue: "qwe123",
               keyboardType: TextInputType.visiblePassword,
+              textInputAction: TextInputAction.done,
               decoration: InputDecoration(
                 enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(

@@ -16,7 +16,7 @@ class ProfilePresenter {
   }
 
   void _loadAndShowProfile() {
-    _repository?.getProfile().then((profile) {
+    _repository.getProfile().then((profile) {
       _view?.showProfile(profile);
     });
   }
@@ -24,7 +24,7 @@ class ProfilePresenter {
   void handleLogoutClick() {
     _repository.signOut().then((result) {
       if (result) {
-        _view.showSignIn();
+        _view?.showSignIn();
       }
     });
   }

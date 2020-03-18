@@ -12,7 +12,6 @@ class ProfileRepository {
   }
 
   Future<bool> signIn(String email, String password) async {
-
     var body = {
       'login': email,
       'password': password,
@@ -41,8 +40,27 @@ class ProfileRepository {
     });
   }
 
-  Future<bool> signUp() {
-    return Future.value(true);
+  Future<bool> signUp({String email, String password, String nickname, String name, String surname, String patronymic_name, String phone}) async {
+    var body = {
+      'email': email,
+      'password': password,
+      'name': name,
+      'surname': surname,
+      'patronymic_name': patronymic_name,
+      'phone': phone,
+      'nickname': nickname
+    };
+
+    var result = await post("http://188.225.9.129/api/users/register", body: body);
+    if (result.statusCode == 200) {
+      var jsonResult = jsonDecode(result.body);
+
+      var user = jsonResult['data']['user'];
+      var profile = Profile(user['name'], user['email']);
+      return _saveProfile(profile);
+    } else {
+      return Future.value(false);
+    }
   }
 
   Future<Profile> getProfile() {
