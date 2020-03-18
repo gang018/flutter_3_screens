@@ -58,7 +58,6 @@ class SignUpState extends State<SignUpScreen> {
                 maxLines: 1,
                 controller: _passwordController,
                 keyboardType: TextInputType.visiblePassword,
-                focusNode: ,
                 textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
                   enabledBorder: UnderlineInputBorder(
